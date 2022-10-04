@@ -21,6 +21,9 @@ class ShoppingList:
     def add_product(self, name: str, price: float):
         self.__shoppinglist[name] = Product(name, price)                  
 
+    def remove_product(self, name):      
+        del self.__shoppinglist[name]
+
     def validate_name(self, name: str):
         if name != "":
             return True
@@ -34,6 +37,12 @@ class ShoppingList:
         else:
             print(f"Error setting price: Price must be number 0 or higher. Try again!")
             return False
+
+    def find_product(self, name):
+        if self.__shoppinglist[name]:
+            return self.__shoppinglist[name]
+        else:
+            return None
 
     def get_most_expensive(self):
         most_expensive = -1
@@ -81,9 +90,10 @@ class Application:
         print("Welcome to this amazing Shopping List app by Anssi! (❁´◡`❁)")
         print("What would you like to do? Here are the commands:")
         print("1: Add item to the shopping list")
-        print("2: Check the most expensive item on your shopping list")
-        print("3: Check the least expensive item on your shopping list")
-        print("4: Print your shopping list")
+        print("2: Delete item from the shopping list")
+        print("3: Check the most expensive item on your shopping list")
+        print("4: Check the least expensive item on your shopping list")
+        print("5: Print your shopping list")
         print("0: Stop the app")
 
     def goodbye(self):
@@ -105,7 +115,19 @@ class Application:
                 print(f"ValueError when setting price: Price must be number. Try again!")     
         self.__app.add_product(name, price)
 
-       
+    def remove_item(self):
+        while True:
+            name = input("Name: ")
+            #Validate if name input is valid
+            if self.__app.validate_name(name):
+                break
+        try:            
+            if self.__app.find_product(name) != None:
+                self.__app.remove_product(name)
+                print(f"Item {name} deleted successfully!")
+        except KeyError:
+            print("No such thing on the shopping list!")
+               
     def most_expensive(self):
         if self.__app.total_items() == 0:
             print("There is no items in your shopping list! :(")
@@ -125,7 +147,7 @@ class Application:
             print("There is no items in your shopping list! :(")
         else:
             print()
-            print("Here is your shopping list:")
+            print("Here is your shopping list")
             self.__app.print_shoppinglist()
 
     def invalid_command(self):
@@ -133,8 +155,8 @@ class Application:
 
     def execute(self):
         self.welcome()
-        while True:
-            print()
+        print()
+        while True:            
             command = input("Command: ")
             if command == "0":
                 self.goodbye()
@@ -142,13 +164,17 @@ class Application:
             elif command == "1":
                 self.add_item()
             elif command == "2":
-                self.most_expensive()
+                self.remove_item()
             elif command == "3":
-                self.least_expensive()
+                self.most_expensive()
             elif command == "4":
+                self.least_expensive()
+            elif command == "5":
                 self.print_all()
             else:
                 self.invalid_command()
+            print()
+            print("1 (Add), 2 (Remove), 3 (Most expensive), 4 (Least expensive), 5 (Print), 0 (Exit)")
 
 
 shopping = Application()
