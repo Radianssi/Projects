@@ -179,7 +179,3 @@ class Application:
 
 shopping = Application()
 shopping.execute()
-
-
-if __name__ == "__main__":
-    pass
